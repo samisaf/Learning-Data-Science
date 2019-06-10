@@ -62,11 +62,15 @@ def logistic_cost(X, y, reg=0):
     theta: 1D array of length n (n, ) representing model weights
     reg: a number representing a regularization constant
     """
+    # (hypo==0) & (y==1)
+    epsilon = 1e-100  
+    m, n = X.shape
     def on(theta):
-        m, n = X.shape
         hypo = logistic_hypothesis(X, theta)
-        #print(y, hypo)
-        costs = -y * np.log(hypo) - (1 - y) * np.log(1 - hypo)
+        costs = -y * np.log(hypo + epsilon) - (1 - y) * np.log(1 - hypo + epsilon)
+        #costs = np.log(hypo.where((hypo!=0) & (y==1))) - np.log(1 - hypo.where((hypo!=1) & (y==0)))
+        #costs = sum(np.log(hypo[y==1 and hypo!=0])) + sum(np.log(1-hypo[y==0] and hypo!=1))
+        #costs = -y * np.log(hypo) - (1 - y) * np.log(1 - hypo)
         penalties = 0.5 * reg * theta[1:]**2
         return (sum(costs) + sum(penalties)) / m
     return on
@@ -111,7 +115,7 @@ def test_binary():
     print(' -25.161 0.206 0.201\n')
     
     theta_expected = np.array([-25.161, 0.206, 0.201])
-    threshold = 0.01
+    threshold = 0.1
     assert sum(abs(theta -theta_expected)) < threshold
 
 def test():
