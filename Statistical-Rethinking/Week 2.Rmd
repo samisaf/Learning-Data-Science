@@ -1,0 +1,34 @@
+---
+title: "Week 2"
+output:
+  html_document:
+    df_print: paged
+---
+
+## Question 1
+The weights listed below were recorded in the !Kung census, but heights
+were not recorded for these individuals. Provide predicted heights and 89%
+compatibility intervals for each of these individuals. That is, fill in the table
+below, using model-based predictions.
+
+```{r}
+library(rethinking)
+data("Howell1")
+head(Howell1)
+```
+
+
+```{r}
+sample_mu = rnorm(1e4, mean=178, sd=20)
+sample_sigma = runif(1e4, min=0, max=50)
+prior_h = rnorm(1e4, sample_mu, sample_sigma)
+d = density(prior_h)
+plot(d)
+```
+
+Add a new chunk by clicking the *Insert Chunk* button on the toolbar or by pressing *Cmd+Option+I*.
+
+When you save the notebook, an HTML file containing the code and output will be saved alongside it (click the *Preview* button or press *Cmd+Shift+K* to preview the HTML file). 
+
+The preview shows you a rendered HTML copy of the contents of the editor. Consequently, unlike *Knit*, *Preview* does not run any R code chunks. Instead, the output of the chunk when it was last run in the editor is displayed.
+
